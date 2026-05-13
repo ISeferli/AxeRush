@@ -1,19 +1,7 @@
 #include "raylib.h"
-
-static int windowWidth = 800;
-static int windowHeight = 450;
-
-/**
- * Changes item's coordinates
- * 
- * According to the input keys (based on keyboard), move the x, y coordinates
- * given with the specific speed. The move stays inside the window.
- * 
- * @param x Axis X coordinate
- * @param y Axis Y coordinate
- * @param speed Coordinate value increase per button press
- **/
-void GetMoveInput(int* x, int* y, int speed);
+#include "bubble_movement.h"
+#include "global.h"
+#include "object_animation.h"
 
 /**
  * Checks two items collision on x axis
@@ -43,8 +31,8 @@ bool CheckCollisionY(int* u_edge_a, int* b_edge_a, int* u_edge_b, int* b_edge_b)
 
 int main(){
     // Circle Coordinates
-    int circle_x = windowWidth/2;
-    int circle_y = windowHeight/2;
+    int circle_x = 0;
+    int circle_y = 0;
     int circle_r = 25;
     int moveSpeed = 1;
     // Circle Edges
@@ -54,19 +42,20 @@ int main(){
     int u_circle_y{circle_y - circle_r};
 
     // Axe Coordinates
-    int axe_x = 400;
-    int axe_y = 0;
-    int axe_length = 50;
+    int axe_x;
+    int axe_y;
+    int axe_length;
+    
+    // Create Window
+    bool collisionWithAxe = true;
+    SetTargetFPS(60);
+    InitWindow(windowWidth, windowHeight, "Axe Game");
+    InitializeSprite(windowWidth, windowHeight, &axe_x, &axe_y, &axe_length, "axe.png");
     // Axe Edges
     int l_axe_x{axe_x};
     int r_axe_x{axe_x + axe_length};
     int b_axe_y{axe_y + axe_length};
     int u_axe_y{axe_y};
-
-    // Create Window
-    bool collisionWithAxe = true;
-    SetTargetFPS(60);
-    InitWindow(windowWidth, windowHeight, "Axe Game");
     while (!WindowShouldClose())
     {
         BeginDrawing();
@@ -78,9 +67,9 @@ int main(){
         } 
         else 
         {
+            DrawAnimation(axe_x, axe_y);
             DrawCircle(circle_x, circle_y, circle_r, BLUE);
-            DrawRectangle(axe_x, axe_y, axe_length, axe_length, RED);
-            GetMoveInput(&circle_x, &circle_y, moveSpeed);
+            HandleMovement(&circle_x, &circle_y, moveSpeed);
             // Update Item Objects
             l_circle_x = circle_x - circle_r;
             r_circle_x = circle_x + circle_r;
@@ -94,29 +83,6 @@ int main(){
         }
         EndDrawing();
     }    
-}
-
-void GetMoveInput(int* x, int* y, int speed)
-{
-    if(IsKeyDown(KEY_A) && *x > 0)
-    {
-        *x -= speed;
-    }
-
-    if(IsKeyDown(KEY_D) && *x < windowWidth)
-    {
-        *x += speed;
-    }
-
-    if(IsKeyDown(KEY_W) && *y > 0)
-    {
-        *y -= speed;
-    }
-
-    if(IsKeyDown(KEY_S) && *y < windowHeight)
-    {
-        *y += speed;
-    }
 }
 
 bool CheckCollisionX(int* l_edge_a, int* r_edge_a, int* l_edge_b, int* r_edge_b)
