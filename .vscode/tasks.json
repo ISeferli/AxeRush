@@ -7,7 +7,7 @@
             "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
                 "*.cpp",
-                "-o", "dasher.exe",
+                "-o", "axe.exe",
                 "-I", "C:/msys64/mingw64/include",
                 "-L", "C:/msys64/mingw64/lib",
                 "-lraylib",
