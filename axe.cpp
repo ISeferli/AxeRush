@@ -1,5 +1,4 @@
 #include "axe.h"
-#include "global.h"
 #include "raymath.h"
 #include <ctime>
 
@@ -12,7 +11,7 @@ Axe::Axe(int width, int height)
     texHeight = texture.height;
 }
 
-void Axe::Tick(float deltaTime)
+void Axe::Tick(float deltaTime, int width, int height)
 {
     runningRotationTime += deltaTime;
     if(runningRotationTime >= updateRotationTime){
@@ -26,15 +25,15 @@ void Axe::Tick(float deltaTime)
         speed += 0.5f;
         runningSpeedTime = 0.f;
     }
-    MoveAxe();
+    MoveAxe(width, height);
 }
 
-void Axe::MoveAxe()
+void Axe::MoveAxe(int width, int height)
 {
     position.y += direction.y * speed;
     position.x += direction.x * speed;
-    if(position.y > windowHeight || position.y < 0) direction.y = -direction.y;
-    if(position.x > windowWidth || position.x < 0) direction.x = -direction.x;
+    if(position.y > height || position.y < 0) direction.y = -direction.y;
+    if(position.x > width || position.x < 0) direction.x = -direction.x;
     DrawAxe();
 }
 

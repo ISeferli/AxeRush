@@ -11,6 +11,6 @@
  * @param position Previous position of the item to move
  * @return Vector2 direction of the input given
  **/
-Vector2 HandleMovement(Vector2 position);
+Vector2 HandleMovement(Vector2 position, int width, int height);
 
 #endif

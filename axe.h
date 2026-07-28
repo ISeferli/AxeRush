@@ -22,8 +22,8 @@ class Axe{
     public:
         Axe(int width, int height);
         Vector2 GetPosition() { return position; }
-        void Tick(float deltaTime);
-        void MoveAxe();
+        void Tick(float deltaTime, int width, int height);
+        void MoveAxe(int width, int height);
         void DrawAxe();
         float GetCollisionRadius() { return (texWidth * scale) / 10.f; }
 };
