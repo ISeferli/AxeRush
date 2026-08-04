@@ -26,6 +26,7 @@ class Axe{
         void MoveAxe(int width, int height);
         void DrawAxe();
         float GetCollisionRadius() { return (texWidth * scale) / 10.f; }
+        void RestartAxe(int width, int height);
 };
 
 #endif

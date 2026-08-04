@@ -5,10 +5,10 @@ using namespace std;
 
 Bubble::Bubble()
 { 
-    position.x = 0;
-    position.y = 10;
     texWidth = texture.width;
     texHeight = texture.height;
+    position.x = 0 + texWidth;
+    position.y = 10 + texHeight;
 }
 
 void Bubble::MoveBubble(Vector2 input)
@@ -39,4 +39,14 @@ void Bubble::Tick(float deltaTime, Vector2 input)
         runningRotationTime = 0.f;
     }
     MoveBubble(input);
+}
+
+void Bubble::RestartBubble()
+{
+    isBroken = false;
+    position.x = 0 + texWidth;
+    position.y = 10 + texHeight;
+    texture = normal_tex;
+    speed = 2.f;
+    brokenTime = 10;
 }

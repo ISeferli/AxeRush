@@ -45,3 +45,14 @@ void Axe::DrawAxe()
     DrawTexturePro(texture, source, dest, origin, rotation, WHITE);
     // DrawCircleLines(GetPosition().x, GetPosition().y, GetCollisionRadius(), RED);
 }
+
+void Axe::RestartAxe(int width, int height)
+{
+    srand(time(0));
+    position.x = rand() % width;
+    position.y = rand() % height;
+    speed = 1.f;
+    direction.x = 2;
+    direction.y = 2;
+    rotation = 0;
+}
