@@ -22,7 +22,7 @@ void GameLoad(GameScreen *screen) {
     (*screen) = MAIN_MENU;
 }
 
-void GameSceneUpdate(Bubble* bubble, Axe* axe, Font gameFont) {
+bool GameSceneUpdate(Bubble* bubble, Axe* axe, Font gameFont, int seconds) {
     Vector2 moveInput{};
     if(CheckCollisionCircles(bubble->GetPosition(), bubble->GetRadius(), axe->GetPosition(), axe->GetCollisionRadius()))
     {
@@ -41,6 +41,7 @@ void GameSceneUpdate(Bubble* bubble, Axe* axe, Font gameFont) {
             bubble->RestartBubble();
             axe->RestartAxe(SCREEN_WIDTH, SCREEN_HEIGHT);
         }
+        return false;
     }
     else
     {
@@ -48,8 +49,12 @@ void GameSceneUpdate(Bubble* bubble, Axe* axe, Font gameFont) {
         bubble->Tick(GetFrameTime(), moveInput);
         axe->Tick(GetFrameTime(), SCREEN_WIDTH, SCREEN_HEIGHT);
     }
-    Vector2 timeTextSize = MeasureTextEx(gameFont, TIME, 30, 0);
-    DrawTextEx(gameFont, TIME, {SCREEN_WIDTH/2 - timeTextSize.x/2, 0.f + timeTextSize.y/2}, 30, 0, yellow);
+    Vector2 timeLabelSize = MeasureTextEx(gameFont, TIME, 30, 0);
+    DrawTextEx(gameFont, TIME, {SCREEN_WIDTH/2 - timeLabelSize.x/2 - 20, 0.f + timeLabelSize.y/2}, 30, 0, yellow);
+    const char *timeStr = TextFormat("%02d:%02d", seconds / 60, seconds % 60);
+    Vector2 timeSize = MeasureTextEx(gameFont, timeStr, 25, 0);
+    DrawTextEx(gameFont, timeStr, {SCREEN_WIDTH/2 - timeSize.x/2 + 55, 5.f + timeSize.y/2}, 25, 0, yellow);
+    return true;
 }
 
 void MenuSceneUpdate(Font gameFont, GameScreen* screen, bool* exit) {
@@ -77,6 +82,8 @@ int main(){
     Axe axe{SCREEN_WIDTH, SCREEN_HEIGHT};
     Font gameFont{LoadFontEx("playlike-font.ttf", 32, nullptr, 0)};
     bool exit = false;
+    float elapsed = 0.0f;
+    int   seconds = 0;
     while (!WindowShouldClose() && exit==false)
     {
         BeginDrawing();
@@ -88,7 +95,12 @@ int main(){
             break;
             case GAME:
             HideCursor();
-            GameSceneUpdate(&bubble, &axe, gameFont);
+            if(GameSceneUpdate(&bubble, &axe, gameFont, seconds)) {
+                elapsed += GetFrameTime();
+                seconds  = (int)elapsed;
+            } else {
+                elapsed = 0.0f;
+            }
             break;
         }
         EndDrawing();
